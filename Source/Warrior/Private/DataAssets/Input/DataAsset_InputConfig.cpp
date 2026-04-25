@@ -5,12 +5,9 @@
 
 UInputAction* UDataAsset_InputConfig::FindNativeInputActionByTag(const FGameplayTag& Tag) const
 {
-	for (const FWarriorInputActionConfig& InputAction : NativeInputActions)
+	if (NativeInputActions.Contains(Tag))
 	{
-		if (InputAction.InputTag == Tag && InputAction.InputAction)
-		{
-			return InputAction.InputAction;
-		}
+		return NativeInputActions[Tag];
 	}
 	
 	return nullptr;

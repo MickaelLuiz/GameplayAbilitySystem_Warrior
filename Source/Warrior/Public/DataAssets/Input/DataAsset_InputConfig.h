@@ -10,18 +10,6 @@
 class UInputMappingContext;
 class UInputAction;
 
-USTRUCT(BlueprintType)
-struct FWarriorInputActionConfig
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(Categories="DataAssets|InputTag"))
-	FGameplayTag InputTag;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UInputAction> InputAction;
-};
-
 /**
  * 
  */
@@ -35,7 +23,7 @@ public:
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(TitleProperty = "InputTag"))
-	TArray<FWarriorInputActionConfig> NativeInputActions;
+	TMap<FGameplayTag, UInputAction*> NativeInputActions;
 	
 	UInputAction* FindNativeInputActionByTag(const FGameplayTag& Tag) const;
 };
