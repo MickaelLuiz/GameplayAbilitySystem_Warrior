@@ -14,3 +14,15 @@ Build
 *.suo
 *.xcodeproj
 *.xcworkspace
+
+###################################
+# Arquivos Gerados pelo JetBrains Rider #
+###################################
+# Diretório de Cache
+.idea
+
+# Arquivos de Solução e Projeto
+*.sln
+*.csproj
+*.sln.DotSettings
+*.sln.DotSettings.user

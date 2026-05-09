@@ -3,6 +3,7 @@
 
 #include "Characters/WarriorHeroCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "WarriorDebugHelper.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
@@ -46,7 +47,21 @@ AWarriorHeroCharacter::AWarriorHeroCharacter()
 void AWarriorHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Debug::Print("Warrior Hero Character BeginPlay");
+	
+}
+
+void AWarriorHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (WarriorAbilitySystemComponent && WarriorAttributeSet)
+	{
+		const FString ASCText = FString::Printf(TEXT("Owner actor: %s, Avatar actor: %s"), 
+			*WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), 
+			*WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
+		Debug::Print("Ability system component is valid | " + ASCText, FColor::Green);
+		Debug::Print("Attribute set is valid | " + ASCText, FColor::Green);
+	}
 }
 
 void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
