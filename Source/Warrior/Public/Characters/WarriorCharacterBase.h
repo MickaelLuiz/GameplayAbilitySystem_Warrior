@@ -7,8 +7,9 @@
 #include "GameFramework/Character.h"
 #include "WarriorCharacterBase.generated.h"
 
-class UAttributeSet;
-class UAbilitySystemComponent;
+class UWarriorAttributeSet;
+class UWarriorAbilitySystemComponent;
+class UDataAsset_StartUpDataBase;
 
 UCLASS(Abstract)
 class WARRIOR_API AWarriorCharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -28,12 +29,15 @@ public:
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	TObjectPtr<UAbilitySystemComponent> WarriorAbilitySystemComponent;
+	TObjectPtr<UWarriorAbilitySystemComponent> WarriorAbilitySystemComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	TObjectPtr<UAttributeSet> WarriorAttributeSet;
+	TObjectPtr<UWarriorAttributeSet> WarriorAttributeSet;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> StartUpData;
 	
 public:
-	FORCEINLINE UAbilitySystemComponent* GetWarriorAbilitySystemComponent() const { return WarriorAbilitySystemComponent; }
-	FORCEINLINE UAttributeSet* GetWarriorAttributeSet() const { return WarriorAttributeSet; }
+	FORCEINLINE UWarriorAbilitySystemComponent* GetWarriorAbilitySystemComponent() const { return WarriorAbilitySystemComponent; }
+	FORCEINLINE UWarriorAttributeSet* GetWarriorAttributeSet() const { return WarriorAttributeSet; }
 };
