@@ -3,34 +3,49 @@
 
 #include "Components/Combat/PawnCombatComponent.h"
 
+#include "WarriorDebugHelper.h"
+#include "Itens/Weapons/WarriorWeaponBase.h"
 
-// Sets default values for this component's properties
-UPawnCombatComponent::UPawnCombatComponent()
+
+void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister,
+                                                 AWarriorWeaponBase* InWeaponToRegister, bool bRegisterAsEquippedWeapon)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
-// Called when the game starts
-void UPawnCombatComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
+	checkf(!CharacterCarriedWeaponMap.Contains(InWeaponTagToRegister), 
+		TEXT("A named %s has already been added as carried weapon"), *InWeaponTagToRegister.ToString())
+	check(InWeaponToRegister);
 	
+	CharacterCarriedWeaponMap.Emplace(InWeaponTagToRegister, InWeaponToRegister);
+
+	if (bRegisterAsEquippedWeapon)
+	{
+		CurrentEquippedWeaponTag = InWeaponTagToRegister;
+	}
+	
+	const FString WeaponString = FString::Printf(TEXT("A Weapon named: %s has been registered using the tag %s")
+		, *InWeaponToRegister->GetName(), *InWeaponTagToRegister.ToString());
+	Debug::Print(WeaponString);
 }
 
-
-// Called every frame
-void UPawnCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                         FActorComponentTickFunction* ThisTickFunction)
+AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	if (CharacterCarriedWeaponMap.Contains(InWeaponTagToGet))
+	{
+		if (AWarriorWeaponBase* const* FoundWeapon = CharacterCarriedWeaponMap.Find(InWeaponTagToGet))
+		{
+			return *FoundWeapon;
+		}
+		
+	}
+	
+	return nullptr;
 }
 
+AWarriorWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() const
+{
+	if (!CurrentEquippedWeaponTag.IsValid())
+	{
+		return nullptr;
+	}
+	
+	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+}
